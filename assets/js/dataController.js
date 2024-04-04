@@ -12,11 +12,20 @@ export function updateData(noteArray, id) {
     update(noteItemRef, noteArray);
 }
 
-export function deleteData(id) {
-        const noteItemRef = ref(database, `notes/${id}`);
-        console.log(id)
-        console.log(noteItemRef)
-        remove(noteItemRef);
+export function updateStatus(id, status) {
+  const noteItemRef = ref(database, `notes/${id}`);
+  update(
+    noteItemRef,
+    {
+      status: status // Update the status with the provided value
+  }
+  )
+  .then(() => {
+      console.log("Status updated successfully.");
+  })
+  .catch((error) => {
+      console.error("Error updating status:", error);
+  });
 }
 export async function getNoteDataById(id) {
   const noteItemRef = ref(database, `notes/${id}`);

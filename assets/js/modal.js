@@ -16,7 +16,9 @@ export function saveNote(){
     if(pin.classList.contains("pinned")){
       pinValue = 1
     }
+    var logid = JSON.parse(localStorage.getItem('log-id')) || [];
     const noteArray = {
+        userID: logid,
         title: noteTitle.value,
         content: noteText.value,
         dateCreated: new Date().toISOString(), // Set the creation date
@@ -99,14 +101,14 @@ export function bgColorListener(){
         
         element.classList.add("active");
 
-        const modalContent = document.querySelector('.modal-content');
+        const modalContent = document.querySelector('#note-modal');
         if(modalContent.classList.contains('bg-white')){
             modalContent.classList.remove('bg-white');
         }
         modalContent.style.backgroundColor = ''
         modalContent.style.backgroundColor = color
 
-        document.querySelector('.dropdown-menu').style.backgroundColor = color;
+        document.querySelector('#bg-color-dropdown-menu').style.backgroundColor = color;
         document.querySelectorAll('#background-color').forEach(function(otherElement) {
             if (otherElement !== element) {
                 otherElement.classList.remove("active");
@@ -125,13 +127,15 @@ export function autoResizeTextarea(){
 }
 export function modal(){
     let modalHtml = 
-    `<button id="add-note-btn"  type="button" class="btn btn-dark position-fixed text-white m-3" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
-    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"/></svg>
+    `<button id="add-note-btn"  type="button" class="rounded-circle btn btn-dark position-fixed text-white m-3" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
+      <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+       <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" fill="white"/>
+      </svg>
     </button>
   
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog border-1 modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content rounded-3 bg-white shadow-sm" >
+    <div id="note-modal" class="modal-content rounded-3 bg-white shadow-sm" >
       <div class="modal-body d-flex flex-column gap-1">
         <div class="d-flex">
             <input type="text" class="form-control p-0 border-0 shadow-none h5 bg-transparent" placeholder="Title" id="inputed-note-title">
@@ -141,7 +145,7 @@ export function modal(){
           </div>
         <form>
           <div class="mb-2">
-            <textarea placeholder="note" id="inputed-note-text" class=" form-control bg-transparent p-0 border-0 shadow-none resize-none" rows="3" id="message-text" style="resize: none;"></textarea>
+            <textarea placeholder="note" id="inputed-note-text" class=" form-control bg-transparent p-0 border-0 shadow-none resize-none" rows="3" id="message-text" style="resize: none; overflow:hidden;"></textarea>
           </div>
         </form>
       </div>
@@ -156,7 +160,7 @@ export function modal(){
                                 <path d="M480-80q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-83 32.5-156t88-127Q256-817 330-848.5T488-880q80 0 151 27.5t124.5 76q53.5 48.5 85 115T880-518q0 115-70 176.5T640-280h-74q-9 0-12.5 5t-3.5 11q0 12 15 34.5t15 51.5q0 50-27.5 74T480-80Zm0-400Zm-220 40q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm120-160q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm200 0q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm120 160q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17ZM480-160q9 0 14.5-5t5.5-13q0-14-15-33t-15-57q0-42 29-67t71-25h70q66 0 113-38.5T800-518q0-121-92.5-201.5T488-800q-136 0-232 93t-96 227q0 133 93.5 226.5T480-160Z"/>
                               </svg>
                             </button>
-                            <ul class="dropdown-menu p-2 rounded-3" style="width: auto;">
+                            <ul id="bg-color-dropdown-menu" class="dropdown-menu p-2 rounded-3" style="width: auto;">
                               <ul class="list-group list-group-horizontal p-0 gap-2 bg-color bg-transparent">
                               <li id="background-color" class="list-group-item p-1 rounded-circle d-flex active bg-transparent" color="white">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M800-436q0 36-8 69t-22 63l-62-60q6-17 9-34.5t3-37.5q0-47-17.5-89T650-600L480-768l-88 86-56-56 144-142 226 222q44 42 69 99.5T800-436Zm-8 380L668-180q-41 29-88 44.5T480-120q-133 0-226.5-92.5T160-436q0-51 16-98t48-90L56-792l56-56 736 736-56 56ZM480-200q36 0 68.5-10t61.5-28L280-566q-21 32-30.5 64t-9.5 66q0 98 70 167t170 69Zm-37-204Zm110-116Z"/></svg>

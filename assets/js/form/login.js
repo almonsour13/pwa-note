@@ -1,11 +1,9 @@
 import {loginUser, signupUser} from './auth.js';
-//import { loadNote } from "./note.js";
-
+import { loadNote } from '../note.js';
+const mainWrapper = document.getElementById('main-wrapper');
 export function loadLogin(){
-    const pageWrapper = document.getElementById('page-wrapper');
-      pageWrapper.innerHTML = login();
+      mainWrapper.innerHTML = login();
       loginListener();
-  //  signupListener()
       switchToSignUp();
       showPassListener();
 }
@@ -16,8 +14,9 @@ function loginListener(){
         if(userName.value != '' || passWord.value != '' ){ 
         loginUser(userName.value, passWord.value, (success) => {
           if (success) {
-            const pageWrapper = document.getElementById('page-wrapper');
+            const pageWrapper = document.getElementById('main-wrapper');
             pageWrapper.innerHTML = ''
+            loadNote()
           } else {
             console.log("Login failed. Invalid username or password.");
           }
@@ -45,7 +44,7 @@ function signupListener(){
 }
 function switchToSignUp(){
     document.getElementById('switch-to-signup-btn').addEventListener('click', function(){
-        const pageWrapper = document.getElementById('page-wrapper');
+        const pageWrapper = document.getElementById('main-wrapper');
         pageWrapper.innerHTML = signup();
         switchToLoginUp()
         signupListener()
@@ -53,7 +52,7 @@ function switchToSignUp(){
 }
 function switchToLoginUp(){
     document.getElementById('switch-to-login-btn').addEventListener('click', function(){
-        const pageWrapper = document.getElementById('page-wrapper');
+        const pageWrapper = document.getElementById('main-wrapper');
         pageWrapper.innerHTML = login();
         switchToSignUp();
         loginListener()
