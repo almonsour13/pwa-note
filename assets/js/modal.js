@@ -76,6 +76,9 @@ export function addBtnNote(){
     })
 });
 }
+export function deleteNote(){
+  
+}
 export function pinBtnListener(){
   document.querySelector('#pin-btn').addEventListener('click', function(e){
     console.log("adsad")

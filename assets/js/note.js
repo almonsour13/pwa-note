@@ -1,13 +1,17 @@
 import { modal,autoResizeTextarea, bgColorListener, pinBtnListener,saveNote,addBtnNote } from "./modal.js";
 import { getDatabase, ref, push,get, set, update, remove, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
 import { getNoteDataById,deleteData } from "./dataController.js";
+
 const database = getDatabase();
 const noteRef = ref(database, 'notes/');
 
 export function loadNote(){
     const pageWrapper = document.getElementById('page-wrapper');
     const cardContainer = 
-    `<div class="card-container row" >
+  `<div class="row p-1">
+            <h4 class="p-0 m-0">Notches<h4>
+    </div>
+    <div class="card-container row" >
     </div>`;
     pageWrapper.innerHTML   = cardContainer+modal();
     cards();
@@ -21,6 +25,7 @@ function clickCardListener(){
     document.querySelectorAll('.card').forEach(element => {
         element.addEventListener('click', function() {
             const id = element.getAttribute('id');
+           // element.removeAttribute('id')
             getNoteDataById(id)
             .then((data) => {
                 if (data) {

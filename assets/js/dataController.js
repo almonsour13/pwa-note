@@ -14,6 +14,8 @@ export function updateData(noteArray, id) {
 
 export function deleteData(id) {
         const noteItemRef = ref(database, `notes/${id}`);
+        console.log(id)
+        console.log(noteItemRef)
         remove(noteItemRef);
 }
 export async function getNoteDataById(id) {
