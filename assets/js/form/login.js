@@ -1,27 +1,44 @@
+import {loginUser, signupUser} from './auth.js';
+//import { loadNote } from "./note.js";
+
 export function loadLogin(){
     const pageWrapper = document.getElementById('page-wrapper');
-    pageWrapper.innerHTML = login();
-    loginListener();
-    switchToSignUp();
-    switchToLoginUp()
-    showPassListener();
+      pageWrapper.innerHTML = login();
+      loginListener();
+  //  signupListener()
+      switchToSignUp();
+      showPassListener();
 }
 function loginListener(){
     document.getElementById('login-btn').addEventListener('click', function(){
         const userName = document.getElementById('username');
         const passWord = document.getElementById('password');
-        if(userName.value != '' || passWord.value != '' ){
-            
+        if(userName.value != '' || passWord.value != '' ){ 
+        loginUser(userName.value, passWord.value, (success) => {
+          if (success) {
+            const pageWrapper = document.getElementById('page-wrapper');
+            pageWrapper.innerHTML = ''
+          } else {
+            console.log("Login failed. Invalid username or password.");
+          }
+        });
+          
         }
 
     });
 }
 function signupListener(){
-    document.getElementById('login-btn').addEventListener('click', function(){
+    document.getElementById('signup-btn').addEventListener('click', function(){
         const userName = document.getElementById('username');
-        const passWord = document.getElementById('password');
-        if(userName.value != '' || passWord.value != '' ){
-            
+        const confirmPassWord = document.getElementById('password');
+        const passWord = document.getElementById('confirm-password');
+        if(userName.value != '' || passWord.value != '' ||  confirmPassWord.value != ''){
+            if(passWord.value == confirmPassWord.value){
+              signupUser(userName.value,passWord.value)
+                loadNote()
+            }else{
+              
+            }
         }
 
     });
@@ -40,10 +57,12 @@ function switchToLoginUp(){
         pageWrapper.innerHTML = login();
         switchToSignUp();
         loginListener()
+        showPassListener()
     });
 }
 function showPassListener(){
-    document.getElementById('show-password').addEventListener('click', function(){
+    document.getElementById('show-password').addEventListener('click', function(e){
+      e.preventDefault()
         const element = this;
         const passWord = document.getElementById('password');
         if(passWord.type == "password"){
@@ -64,7 +83,7 @@ function login(){
             <h1 class="h6 text-center text-gray-500 font-weight-bold">Login</h1>
         </div>
         <div class="card-body">
-            <form class="row gap-3 flex-column">
+            <div class="row gap-3 flex-column">
                 <div class="form-group ">
                     <label for="inputEmail4" class="">Username</label>
                     <input class="form-control rounded-3" id="username" placeholder="username" required>
@@ -74,7 +93,7 @@ function login(){
                     <div class="position-relative p-0">
                         <input type="password" class="form-control rounded-3" id="password" placeholder="password" required>
                         <div id="show-password" class="show-password position-absolute" style="right: 0; top: 0; margin: 5px 10px;">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
+                            <svg id="show-password" xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
                         </div>
                     </div>
                 </div>
@@ -88,7 +107,7 @@ function login(){
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>`;
     return login;
@@ -102,7 +121,7 @@ function signup(){
                 <h1 class="h6 text-center text-gray-500 font-weight-bold">Sign up</h1>
             </div>
             <div class="card-body">
-                <form class="row gap-3 flex-column p-0">
+                <div class="row gap-3 flex-column p-0">
                     <div class="form-group ">
                         <label for="inputEmail4" class="">Username</label>
                         <input class="form-control rounded-3" id="username" placeholder="username" required>
@@ -137,7 +156,7 @@ function signup(){
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
     </div>`
     return signup;
