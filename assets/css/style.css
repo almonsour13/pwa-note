@@ -60,3 +60,6 @@ ul.list-group.bg-color li svg{
 ul.list-group.bg-color li.active,ul.list-group.bg-color li:hover{
     border: 2px black solid;
 }
+#show-password svg{
+    fill: rgb(149, 149, 149);
+}

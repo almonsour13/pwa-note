@@ -36,8 +36,8 @@ export function loadHeader(){
                 Are you sure you want to log out?
                 </div>
                 <div class="modal-footer border-0">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button id="logout-btn" type="button" class="btn btn-primary" data-bs-dismiss="modal">Logout</button>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button id="logout-btn" type="button" class="btn btn-dark" data-bs-dismiss="modal">Logout</button>
                 </div>
             </div>
             </div>

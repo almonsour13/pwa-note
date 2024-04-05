@@ -11,7 +11,7 @@ export function cards() {
       for (const key in notes) {
         const note = notes[key];
         if(logid === note.userID && note.status == 0){
-            let itemContent = note.content.substring(0, 400);
+            let itemContent = note.content.substring(0, 300);
             if (note.content.length >= 400) {
                 itemContent += '...';
             }
