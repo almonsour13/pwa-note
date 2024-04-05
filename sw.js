@@ -22,7 +22,11 @@ self.addEventListener('install', (event) => {
                 './assets/css/style.css',
                 './assets/bootstrap-5.3.3-dist/css/bootstrap.min.css',
                 './assets/bootstrap-5.3.3-dist/js/bootstrap.bundle.js',
-                './assets/images/icon.png'
+                './assets/images/icon.png',
+                './assets/images/screenshots/screenshot1.png',
+                './assets/images/screenshots/screenshot2.png',
+                './assets/images/screenshots/screenshot3.png',
+                './assets/images/screenshots/screenshot4.png'
             ]);
             // await cache.addAll([
             //     '/',

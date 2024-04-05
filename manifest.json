@@ -20,19 +20,20 @@
     ],
     "screenshots": [
         {
-            "src": "assets/images/screenshots/screenshot1.png",
+            "src": "assets/images/screenshots/screenshot3.png",
             "type": "image/png",
-            "sizes": "864x1080",
-            "label": "Main screen",
-            "purpose":"any"
+            "sizes": "719x1378",
+            "purpose":"any",
+            "form_factor":"narrow",
+            "label": "Mobile screen"
         },
         {
-            "src": "assets/images/screenshots/screenshot2.png",
+            "src": "assets/images/screenshots/screenshot4.png",
             "type": "image/png",
-            "sizes": "864x1080",
-            "label": "Settings screen",
+            "sizes": "1312x644",
             "form_factor":"wide",
-            "purpose":"any"
+            "purpose":"any",
+            "label": "Desktop screen"
         }
     ]
 }

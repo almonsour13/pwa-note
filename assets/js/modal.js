@@ -130,17 +130,16 @@ export function modal(){
        <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" fill="white"/>
       </svg>
     </button>
-  
     <div class="modal fade p-2" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog border-1 modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-dialog border-1 modal-dialog-centered modal-dialog-scrollable position-relative">
     <div id="note-modal" class="modal-content rounded-3 bg-white shadow-sm" >
       <div class="modal-body d-flex flex-column gap-1">
-        <div class="d-flex">
-            <input type="text" class="form-control p-0 border-0 shadow-none h5 bg-transparent" placeholder="Title" id="inputed-note-title">
+        <div class="d-flex align-items-center justify-content-center p-0">
+            <input type="text" class="form-control m-0 p-0 border-0 shadow-none bg-transparent" placeholder="Title" id="inputed-note-title">
             <button id="pin-btn" type="button" class="p-2 btn rounded-circle">
               <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m640-480 80 80v80H520v240l-40 40-40-40v-240H240v-80l80-80v-280h-40v-80h400v80h-40v280Zm-286 80h252l-46-46v-314H400v314l-46 46Zm126 0Z"/></svg     
             </button>
-          </div>
+        </div>
         <form>
           <div class="mb-2">
             <textarea placeholder="note" id="inputed-note-text" class=" form-control bg-transparent p-0 border-0 shadow-none resize-none" rows="3" id="message-text" style="resize: none; overflow:hidden;"></textarea>
