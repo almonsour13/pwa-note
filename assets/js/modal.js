@@ -62,6 +62,7 @@ export function addBtnNote(){
     noteTitle.value = "";
     const noteText = document.querySelector("#inputed-note-text");
     noteText.value = "";
+    noteText.style.height = 'auto';
     noteText.focus();
     var modal = document.getElementById('exampleModal');
     modal.removeAttribute("noteID")
