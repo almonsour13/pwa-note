@@ -12,7 +12,7 @@ export function loadHeader(){
     `
     <div id="header" class="header p-3 container-fluid d-flex justify-content-between align-items-center">
         <div class="">
-            <h2 class="app-name">Notches</h2>
+            <h2 class="app-name">Notch</h2>
         </div>
         <div class="btn-group ">
             <button id="account-btn" type="button" class="p-0 rounded-circle border-0 bg-transparent dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
