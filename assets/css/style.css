@@ -23,13 +23,14 @@
     width: 3.8rem;
 }
 #account-btn{
-    height: 2.5rem;
-    width: 2.5rem;
+    height: auto;
+    width: auto;
 }
 #account-btn svg{
     fill: rgb(149, 149, 149);
     width: 35px;
     height: 35px;
+    transform: scale(1.2);
 }
 ul.list-group li,ul.list-group li label{
     height: 25px;
