@@ -53,7 +53,9 @@ function clickCardListener(){
                     noteText.style.height = 'auto';
                     setTimeout(function() {
                         noteText.style.height = (noteText.scrollHeight) + 'px';
+                        noteText.focus();
                     }, 500);
+                    
 
                     const pinBtn = document.querySelector('#pin-btn');
                     pinBtn.classList.contains("pinned") ? pinBtn.classList.remove("pinned") : "";
