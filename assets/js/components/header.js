@@ -10,8 +10,8 @@ export function logout(){
 export function loadHeader(){
     let header =
     `
-    <div id="header" class="header py-1 px-3 container-fluid d-flex justify-content-between align-items-center">
-        <div class="">
+    <div id="header" class="header py-0 px-3 container-fluid d-flex justify-content-between align-items-center">
+        <div class="pt-2">
             <h2 class="app-name">Notch</h2>
         </div>
         <div class="btn-group ">

@@ -42,7 +42,6 @@ function clickCardListener(){
     document.querySelectorAll('.card').forEach(element => {
         element.addEventListener('click', function() {
             const id = element.getAttribute('id');
-           // element.removeAttribute('id')
             getNoteDataById(id)
             .then((data) => {
                 if (data) {
@@ -51,10 +50,13 @@ function clickCardListener(){
                     noteTitle.value = note.title;
                     const noteText = document.querySelector("#inputed-note-text");
                     noteText.value = note.content;
+                    noteText.style.height = 'auto';
+                    setTimeout(function() {
+                        noteText.style.height = (noteText.scrollHeight) + 'px';
+                    }, 500);
+
                     const pinBtn = document.querySelector('#pin-btn');
-                    pinBtn.classList.contains("pinned")?pinBtn.classList.remove("pinned"):""
-                    const textarea = document.getElementById('inputed-note-text');
-                    textarea.style.height = 'auto';
+                    pinBtn.classList.contains("pinned") ? pinBtn.classList.remove("pinned") : "";
 
                     if (note.pin == 1) {
                         pinBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M680-840v80h-40v327l-80-80v-247H400v87l-87-87-33-33v-47h400ZM480-40l-40-40v-240H240v-80l80-80v-46L56-792l56-56 736 736-58 56-264-264h-6v240l-40 40ZM354-400h92l-44-44-2-2-46 46Zm126-193Zm-78 149Z"/></svg>`;
@@ -84,7 +86,7 @@ function clickCardListener(){
                         updateStatus(id,2)
                     })
                     modal.setAttribute("noteID", id);
-                    new bootstrap.Modal(modal).show();  
+                    new bootstrap.Modal(modal).show();
                 }
             })
             .catch((error) => {
@@ -93,6 +95,7 @@ function clickCardListener(){
         });
     });
 }
+
 
 function initializeMasonry() {
     var container = document.querySelector('.card-container');
