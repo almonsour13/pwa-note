@@ -88,7 +88,7 @@ function login(){
     `<div class="container-fluid row justify-content-center align-items-center vh-100 p-0 m-0">
     <div class="card col-sm-6 col-md-6 col-lg-4 shadow-sm p-2">
         <div class="card-header border-0 bg-transparent">
-            <h1 class="h3 text-center text-gray-800 font-weight-bold p-2">Notch</h1>
+            <h1 class="h3 app-name text-center text-gray-800 font-weight-bold p-2">Notch</h1>
             <h1 class="h6 text-center text-gray-500 font-weight-bold">Login</h1>
         </div>
         <div class="card-body">
@@ -126,7 +126,7 @@ function signup(){
     `<div class="container-fluid row justify-content-center align-items-center vh-100 p-0 m-0">
         <div class="card col-sm-6 col-md-6 col-lg-4 shadow-sm p-2">
             <div class="card-header border-0 bg-transparent">
-                <h1 class="h3 text-center text-gray-800 font-weight-bold p-2">Notch</h1>
+                <h1 class="h3 text-center app-name text-gray-800 font-weight-bold p-2">Notch</h1>
                 <h1 class="h6 text-center text-gray-500 font-weight-bold">Sign up</h1>
             </div>
             <div class="card-body">
