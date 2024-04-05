@@ -1,18 +1,38 @@
 {
     "id": "/?source=pwa",
-    "lang":"en-us",
-    "name":"Notch app",
-    "short_name":"Notch",
-    "description":"your ultimate companion for jotting down ideas, organizing thoughts, and keeping track of tasks effortlessly",
-    "start_url":"/index.html",
+    "lang": "en-us",
+    "name": "Notch app",
+    "short_name": "Notch",
+    "description": "your ultimate companion for jotting down ideas, organizing thoughts, and keeping track of tasks effortlessly",
+    "start_url": "/index.html",
     "scope": "/",
-    "theme_color":"#2f3d58",
-    "background_color":"#2f3d58",
-    "orientation":"any",
-    "display":"standalone",
-    "icon":{
-        "src":"/assets/images/icon.png",
-        "type":"image/png",
-        "sizes":"144x144"
-    }
- }
+    "theme_color": "#2f3d58",
+    "background_color": "#2f3d58",
+    "orientation": "any",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "assets/images/icon.png",
+            "type": "image/png",
+            "sizes": "144x144",
+            "purpose": "any"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "assets/images/screenshots/screenshot1.png",
+            "type": "image/png",
+            "sizes": "864x1080",
+            "label": "Main screen",
+            "purpose":"any"
+        },
+        {
+            "src": "assets/images/screenshots/screenshot2.png",
+            "type": "image/png",
+            "sizes": "864x1080",
+            "label": "Settings screen",
+            "form_factor":"wide",
+            "purpose":"any"
+        }
+    ]
+}

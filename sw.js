@@ -1,4 +1,4 @@
-const CACHE_NAME = 'note-app';
+const CACHE_NAME = 'notch-app';
 
 self.addEventListener('install', (event) => {
     console.log('install event');
