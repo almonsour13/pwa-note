@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notch</title>
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="assets/bootstrap-5.3.3-dist/css/bootstrap.min.css">
     <script src="assets/bootstrap-5.3.3-dist/js/bootstrap.bundle.js"></script>
     <link rel="stylesheet" href="assets/css/style.css">
@@ -15,6 +16,21 @@
     </div>
     <script src="assets/js/masonry/masonry.pkgd.min.js"></script>
     <script type="module" src="assets/js/firebaseConfig.js"></script>
-  <script type="module" src="assets/js/main.js"></script>
+    <script type="module" src="assets/js/main.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+                .then((registration) => {
+                    //console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch((error) => {
+                    console.error('Service Worker registration failed:', error);
+                });
+        });
+      }else {
+        console.log('Service Worker is not supported in this browser.');
+      }
+    </script>
 </body>
 </html>
