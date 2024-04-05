@@ -10,24 +10,27 @@ export function cards() {
       var logid = JSON.parse(localStorage.getItem('log-id')) || [];
       for (const key in notes) {
         const note = notes[key];
-        console.log(logid)
-        console.log(note.userID[0])
         if(logid === note.userID && note.status == 0){
-          cardContainerHTML += `
-          <div class="col-6 col-sm-6 col-lg-3 p-1">
-            <div id="${key}" class="card border-1 rounded-3 p-2 d-flex flex-column gap-2 cursor-pointer" style="background-color: ${note.color};">
-              ${note.title ? 
-                `<div class="card-header border-0 p-0 py-1 bg-transparent">
-                    <p class="card-title h5 text-truncate m-0">${note.title}</p>
-                </div>` : ''
-                }
-              ${note.content ? 
-                `<div class="card-body p-0">
-                    <p class="card-text lh-sm m-0">${note.content}</p>
-                </div>` : ''
-                }
-            </div>
-          </div>`;
+            let itemContent = note.content.substring(0, 400);
+            if (note.content.length >= 400) {
+                itemContent += '...';
+            }
+
+            cardContainerHTML += `
+            <div class="col-6 col-sm-6 col-lg-3 p-1">
+                <div id="${key}" class="card border-1 rounded-3 p-2 d-flex flex-column gap-2 cursor-pointer" style="background-color: ${note.color};">
+                ${note.title ? 
+                    `<div class="card-header border-0 p-0 py-1 bg-transparent">
+                        <p class="card-title h5 text-truncate m-0">${note.title}</p>
+                    </div>` : ''
+                    }
+                ${note.content ? 
+                    `<div class="card-body p-0">
+                        <p class="card-text lh-sm m-0">${itemContent}</p>
+                    </div>` : ''
+                    }
+                </div>
+            </div>`;
         }
         }
       cardContainer.innerHTML = cardContainerHTML;
