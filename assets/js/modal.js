@@ -127,13 +127,13 @@ export function autoResizeTextarea(){
 }
 export function modal(){
     let modalHtml = 
-    `<button id="add-note-btn"  type="button" class="rounded-circle btn btn-dark position-fixed text-white m-3" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
+    `<button id="add-note-btn"  type="button" class="rounded-circle btn btn-dark position-fixed text-white m-4" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
       <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
        <path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" fill="white"/>
       </svg>
     </button>
   
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade p-4" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog border-1 modal-dialog-centered modal-dialog-scrollable">
     <div id="note-modal" class="modal-content rounded-3 bg-white shadow-sm" >
       <div class="modal-body d-flex flex-column gap-1">
