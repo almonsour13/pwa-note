@@ -14,8 +14,8 @@ self.addEventListener('install', (event) => {
                 './assets/js/note.js',
                 './assets/js/firebaseConfig.js',
                 './assets/js/dataController.js',
-                './assets/js/componenents/cards.js',
-                './assets/js/componenents/header.js',
+                './assets/js/components/cards.js',
+                './assets/js/components/header.js',
                 './assets/js/form/auth.js',
                 './assets/js/form/login.js',
                 './assets/js/masonry/masonry.pkgd.min.js',
@@ -24,6 +24,25 @@ self.addEventListener('install', (event) => {
                 './assets/bootstrap-5.3.3-dist/js/bootstrap.bundle.js',
                 './assets/images/icon.png'
             ]);
+            // await cache.addAll([
+            //     '/',
+            //     'index.html',
+            //     'manifest.json',
+            //     'assets/js/main.js',
+            //     'assets/js/modal.js',
+            //     'assets/js/note.js',
+            //     'assets/js/firebaseConfig.js',
+            //     'assets/js/dataController.js',
+            //     'assets/js/components/cards.js',
+            //     'assets/js/components/header.js',
+            //     'assets/js/form/auth.js',
+            //     'assets/js/form/login.js',
+            //     'assets/js/masonry/masonry.pkgd.min.js',
+            //     'assets/css/style.css',
+            //     'assets/bootstrap-5.3.3-dist/css/bootstrap.min.css',
+            //     'assets/bootstrap-5.3.3-dist/js/bootstrap.bundle.js',
+            //     'assets/images/icon.png'
+            // ]);
             console.log('Assets added to cache');
         } catch (error) {
             console.error('Cache addAll failed:', error);
@@ -35,7 +54,7 @@ self.addEventListener('activate', event => {
     console.log("Version 1 now ready to handle fetches");
 });
 
-self.addEventListener('fetch', event => {
+self.addEventListener('activate', event => {
     event.respondWith((async () => {
         // Only cache GET requests
         if (event.request.method !== 'GET') {
