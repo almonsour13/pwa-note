@@ -10,7 +10,7 @@ export function logout(){
 export function loadHeader(){
     let header =
     `
-    <div id="header" class="header container-fluid d-flex justify-content-between align-items-center">
+    <div id="header" class="header p-3 container-fluid d-flex justify-content-between align-items-center">
         <div class="">
             <h2 class="app-name">Notches</h2>
         </div>
