@@ -10,7 +10,7 @@ export function logout(){
 export function loadHeader(){
     let header =
     `
-    <div id="header" class="header p-3 container-fluid d-flex justify-content-between align-items-center">
+    <div id="header" class="header py-1 px-3 container-fluid d-flex justify-content-between align-items-center">
         <div class="">
             <h2 class="app-name">Notch</h2>
         </div>
@@ -49,7 +49,7 @@ export function loadHeader(){
 export function loadPageWrapper(){
     let pageWrapper =
     `
-    <div id="page-wrapper" class="container-fluid  position-relative px-4 py-0">
+    <div id="page-wrapper" class="container-fluid position-relative px-4 py-2">
 
     </div>
     `;
