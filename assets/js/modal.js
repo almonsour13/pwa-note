@@ -1,5 +1,13 @@
-import { getNoteDataById,updateData,pushData } from "./dataController.js";
-export function saveNote(){
+import { getNoteDataById,updateData,pushData,uploadImage } from "./dataController.js";
+export function modalListener(){
+  autoResizeTextarea();
+  pinBtnListener()
+  bgColorListener()
+  saveNote()
+  addBtnNote()
+  fileInput()
+}
+function saveNote(){
   document.getElementById('add-note').addEventListener('click', function() {
     const modal = document.getElementById('exampleModal');
     const noteTitle = document.querySelector("#inputed-note-title");
@@ -7,6 +15,7 @@ export function saveNote(){
     const pin = document.querySelector('#pin-btn');
     const modalContent = document.querySelector('.modal-content');
     var bgColor = '';
+    
     document.querySelectorAll('#background-color').forEach(function(element) {
         if (element.classList.contains('active')) {
             bgColor = element.getAttribute('color');
@@ -16,6 +25,16 @@ export function saveNote(){
     if(pin.classList.contains("pinned")){
       pinValue = 1
     }
+    var imgWrappers = document.querySelectorAll('.img-wrapper');
+    var imagesPromiseArray = [];
+
+    if (imgWrappers.length !== 0) {
+        // Iterate over each image wrapper and push the uploadImage promise to the array
+        imgWrappers.forEach(function(element) {
+            imagesPromiseArray.push(uploadImage());
+        });
+    }
+    console.log(imagesPromiseArray)
     var logid = JSON.parse(localStorage.getItem('log-id')) || [];
     const noteArray = {
         userID: logid,
@@ -28,6 +47,15 @@ export function saveNote(){
         reminder: '',
         pin: pinValue
     };
+    // Promise.all(imagesPromiseArray)
+    // .then(function(imagesArrays) {
+    //     // Flatten the array of arrays into a single array of images
+    //     var images = imagesArrays.flat();
+    //     noteArray.images = images;
+    // })
+    // .catch(function(error) {
+    //     console.error('Error uploading images:', error);
+    // });
     noteTitle.value = "";
     noteText.value = "";
     setTimeout(function() {
@@ -37,7 +65,7 @@ export function saveNote(){
     
     if (noteID != null && noteID != '0') {
       const existingNote = getNoteDataById(noteID);
-      if (existingNote.title !== noteArray.title || existingNote.text !== noteArray.text) {
+      if (existingNote.title !== noteArray.title || existingNote.text !== noteArray.text || imgWrappers.length !== 0) {
           console.log("update")
           updateData(noteArray, noteID)
       } else {
@@ -45,7 +73,7 @@ export function saveNote(){
       }
   } else {
       // Check if either title or text field is empty
-      if (noteArray.title.trim().length !== 0 || noteArray.content.trim().length !== 0) {
+      if (noteArray.title.trim().length !== 0 || noteArray.content.trim().length !== 0 || imgWrappers.length !== 0) {
         console.log("push")
         pushData(noteArray)
       }else{
@@ -56,7 +84,65 @@ export function saveNote(){
   console.log(noteArray)
   });
 }
-export function addBtnNote(){
+function fileInput(){
+  document.querySelector('#fileInput').addEventListener('change', function() {
+    if (this.files && this.files[0]) {
+        var imgWrapper = document.createElement('div');
+        imgWrapper.className = "img-wrapper w-100 bg-primary p-0 position-relative";
+        // imgWrapper.classList.add("col"); // If you want to add this class separately
+        
+        var img = document.createElement('img');
+        img.setAttribute("id", "upload-img");
+        img.className = "w-100 h-auto";
+        
+        var removeButton = document.createElement('button');
+        removeButton.className = 'remove-img position-absolute btn rounded-3 m-1 p-1';
+        removeButton.style.bottom = "0";
+        removeButton.style.right = "0";
+        removeButton.style.backgroundColor = "rgba(255, 255, 255, 0.475)";
+      
+        removeButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>';
+
+        imgWrapper.appendChild(removeButton);
+        imgWrapper.appendChild(img);
+    
+        var file = this.files[0]; // Get the file object directly
+
+        // Set up a FileReader to read the file as a data URL
+        var reader = new FileReader();
+        reader.onload = function(event) {
+        img.onload = () => {
+          URL.revokeObjectURL(img.src); // no longer needed, free memory
+          var imgContainer = document.querySelector('.img-container');
+          imgContainer.classList.remove("d-none")
+          imgContainer.classList.add("d-block")
+          imgContainer.appendChild(imgWrapper);
+          removeImgListener();
+        };
+        img.src = event.target.result;
+        };
+        reader.readAsDataURL(file); 
+    }
+});
+function removeImgListener(){
+  document.querySelectorAll('.remove-img').forEach((element) => {
+      element.addEventListener('click', function() {
+          var imgWrapper = this.parentElement;
+          imgWrapper.remove(); // Remove the image wrapper completely
+          updateImgContainerVisibility();
+      });
+  });
+}
+function updateImgContainerVisibility() {
+  var imgContainer = document.querySelector('.img-container');
+  var imgWrappers = document.querySelectorAll('.img-wrapper');
+  if (imgWrappers.length === 0) {
+    imgContainer.classList.remove("d-block")
+    imgContainer.classList.add("d-done")
+  }
+}
+}
+function addBtnNote(){
   document.getElementById('add-note-btn').addEventListener('click', function() {
     const noteTitle = document.querySelector("#inputed-note-title");
     noteTitle.value = "";
@@ -80,7 +166,7 @@ export function addBtnNote(){
     })
 });
 }
-export function pinBtnListener(){
+function pinBtnListener(){
   document.querySelector('#pin-btn').addEventListener('click', function(e){
     console.log("adsad")
     const pinBtn = this; 
@@ -92,7 +178,7 @@ export function pinBtnListener(){
     }
   });
 }
-export function bgColorListener(){
+function bgColorListener(){
   document.querySelectorAll('#background-color').forEach(function(element) {
     element.classList.remove("active");
     element.addEventListener('click', function() {
@@ -134,18 +220,21 @@ export function modal(){
     <div class="modal fade p-2" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog border-1 modal-dialog-centered modal-dialog-scrollable position-relative">
     <div id="note-modal" class="modal-content rounded-3 bg-white shadow-sm" >
-      <div class="modal-body d-flex flex-column gap-1">
-        <div class="d-flex align-items-center justify-content-center p-0">
-            <input type="text" class="form-control m-0 p-0 border-0 shadow-none bg-transparent" placeholder="Title" id="inputed-note-title">
-            <button id="pin-btn" type="button" class="p-2 btn rounded-circle">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m640-480 80 80v80H520v240l-40 40-40-40v-240H240v-80l80-80v-280h-40v-80h400v80h-40v280Zm-286 80h252l-46-46v-314H400v314l-46 46Zm126 0Z"/></svg     
-            </button>
+      <div class="modal-body d-flex flex-column gap-1 h-auto position-relative p-0">
+        <div class="img-container row w-100 d-none bg-danger p-0 m-0">
+
+        </div>
+        <div class="d-flex align-items-center justify-content-center pt-3 px-3">
+            <input type="text" class="form-control m-0 p-0 border-0 shadow-none bg-transparent" placeholder="Title" id="inputed-note-title">     
         </div>
         <form>
-          <div class="mb-2">
+          <div class="mb-2 px-3">
             <textarea placeholder="note" id="inputed-note-text" class=" form-control bg-transparent p-0 border-0 shadow-none resize-none" rows="3" id="message-text" style="resize: none; overflow:hidden;"></textarea>
           </div>
         </form>
+        <button id="pin-btn" type="button" class=" m-2 p-1 btn rounded-circle position-absolute d-flex justify-content-cetner align-items-center" style="top:0;right:0;background-color: rgba(255, 255, 255, 0.475);">
+          <svg class="shadow-lg" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m640-480 80 80v80H520v240l-40 40-40-40v-240H240v-80l80-80v-280h-40v-80h400v80h-40v280Zm-286 80h252l-46-46v-314H400v314l-46 46Zm126 0Z"/></svg     
+        </button>
       </div>
       <div class="modal-footer p-1 py-0 shadow-lg border-0">
         <div class="row w-100 align-items-center">
@@ -178,7 +267,7 @@ export function modal(){
                     <li class="list-group-item p-0 pt-2 rounded-circle  bg-transparent"">
                       <label class="form-label bg-transparent" for="fileInput">
                         <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Z"/></svg></label>
-                        <input type="file" class="form-control" id="fileInput" style="display: none;">
+                        <input type="file" class="form-control" id="fileInput" style="display: none;" accept="image/*">
                     </li>
                     <li class="list-group-item p-0 rounded-circle d-none bg-transparent card-btn" id="delete-btn" data-bs-dismiss="modal">
                        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>

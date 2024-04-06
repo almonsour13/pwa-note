@@ -1,4 +1,4 @@
-import { modal,autoResizeTextarea, bgColorListener, pinBtnListener,saveNote,addBtnNote } from "./modal.js";
+import { modal,modalListener } from "./modal.js";
 import { loadHeader, logout,loadPageWrapper } from "./components/header.js";
 import { cards } from "./components/cards.js";
 
@@ -15,11 +15,9 @@ export function loadNote(){
     
     pageWrapper.innerHTML   = cardContainer+modal();
     cards();
-    autoResizeTextarea();
-    pinBtnListener()
-    bgColorListener()
-    saveNote()
-    addBtnNote()
+    modalListener()
+    // const modals = document.getElementById('exampleModal');
+    // new bootstrap.Modal(modals).show();
 }
 // function initializeAllMasonry() {
 //     var containers = document.querySelectorAll('.card-container');
