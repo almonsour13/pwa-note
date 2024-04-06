@@ -18,7 +18,7 @@ export function cards() {
 
             cardContainerHTML += `
             <div class="col-6 col-sm-6 col-lg-3 p-1">
-                <div id="${key}" class="card border-1 rounded-3 p-2 d-flex flex-column gap-2 cursor-pointer" style="background-color: ${note.color};">
+                <div id="${key}" class="card border-1 border-dark rounded-3 p-2 d-flex flex-column gap-2 cursor-pointer" style="background-color: ${note.color};">
                 ${note.title ? 
                     `<div class="card-header border-0 p-0 py-1 bg-transparent">
                         <p class="card-title h5 text-truncate m-0">${note.title}</p>
