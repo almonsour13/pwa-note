@@ -19,6 +19,7 @@ function loginListener(){
             loadNote()
           } else {
             console.log("Login failed. Invalid username or password.");
+            alert("Login failed. Invalid username or password.")
           }
         });
           
@@ -35,7 +36,7 @@ function signupListener(){
             if(passWord.value == confirmPassWord.value){
               signupUser(userName.value,passWord.value)
                 loadNote()
-            }else{
+            }else{ 
               
             }
         }
@@ -78,11 +79,6 @@ function showPassListener() {
     });
 }
 
-
-
-
-
-
 function login(){
     let login = 
     `<div class="container-fluid row justify-content-center align-items-center vh-100 p-0 m-0">
@@ -95,12 +91,12 @@ function login(){
             <div class="row gap-3 flex-column">
                 <div class="form-group ">
                     <label for="username" class="">Username</label>
-                    <input class="form-control rounded-3" id="username" placeholder="username" required >
+                    <input class="form-control rounded-3 shadow-none border border-dark" id="username" placeholder="username" required >
                 </div>
                 <div class="form-group">
                     <label for="password" class="">Password</label>
                     <div class="position-relative p-0">
-                        <input type="password" class="form-control rounded-3" id="password" placeholder="password" required >
+                        <input type="password" class="form-control rounded-3 shadow-none border border-dark" id="password" placeholder="password" required >
                         <div id="show-password" class="show-password position-absolute" style="right: 0; top: 0; margin: 5px 10px;">
                             <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
                         </div>
@@ -133,12 +129,12 @@ function signup(){
                 <div class="row gap-3 flex-column p-0">
                     <div class="form-group ">
                         <label for="username" class="">Username</label>
-                        <input class="form-control rounded-3" id="username" placeholder="username" required>
+                        <input class="form-control rounded-3 shadow-none border border-dark" id="username" placeholder="username" required>
                     </div>
                     <div class="form-group">
                         <label for="password" class="">Password</label>
                         <div class="position-relative p-0">
-                            <input type="password" class="form-control rounded-3" id="password" placeholder="password" required >
+                            <input type="password" class="form-control rounded-3 shadow-none border border-dark" id="password" placeholder="password" required >
                             <div id="show-password" class="show-password position-absolute" style="right: 0; top: 0; margin: 5px 10px;">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
                             </div>
@@ -148,7 +144,7 @@ function signup(){
                     <div class="form-group">
                         <label for="confirm-password" class="">Confirm Password</label>
                         <div class="position-relative p-0">
-                            <input type="password" class="form-control rounded-3" id="confirm-password" placeholder="password" required > 
+                            <input type="password" class="form-control rounded-3 shadow-none border border-dark" id="confirm-password" placeholder="password" required > 
                             <div id="show-password" class="show-password position-absolute" style="right: 0; top: 0; margin: 5px 10px;">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
                             </div>
