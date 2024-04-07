@@ -27,7 +27,7 @@ function saveNote(){
     }
     var imgWrappers = document.querySelectorAll('.img-wrapper');
     var imagesPromiseArray = [];
-
+    var imgContainer = document.querySelector('.img-container');
     if (imgWrappers.length !== 0) {
         imgWrappers.forEach(function(element) {
             imagesPromiseArray.push(uploadImage());
@@ -45,6 +45,7 @@ function saveNote(){
         reminder: '',
         pin: pinValue
     };
+    console.log(imgWrappers.length)
     const noteID = modal.getAttribute('noteID');
    if(imgWrappers.length === 0){
       pushOrUpdate(noteID, noteArray,imgWrappers)
@@ -67,28 +68,31 @@ function saveNote(){
       modalContent.style.backgroundColor = '';
     }, 500);
     
-  console.log(noteArray)
+ // console.log(noteArray)
+  // imgContainer.innerHTML = '';
+  //       imgContainer.classList.remove("d-block")
+       // imgContainer.classList.add("d-done")
   modal.removeAttribute("noteID");
   });
 }
 function pushOrUpdate(noteID,noteArray,imgWrappers){
   if (noteID != null && noteID != '0') {
       const existingNote = getNoteDataById(noteID);
-      if (existingNote.title !== noteArray.title || existingNote.text !== noteArray.text || imgWrappers.length !== 0) {
-          console.log("update")
+      if (existingNote.title !== noteArray.title || existingNote.text !== noteArray.text || imgWrappers.length !== existingNote.images) {
           updateData(noteArray, noteID)
       } else {
           console.log("No changes");
       }
   } else {
       // Check if either title or text field is empty
-      if (noteArray.title.trim().length !== 0 || noteArray.content.trim().length !== 0 || imgWrappers.length !== 0) {
+      if (noteArray.title.trim().length !== 0 || noteArray.content.trim().length !== 0) {
         console.log("push")
         pushData(noteArray)
       }else{
         console.log("Please enter both title and text for the note.");
       }
   }
+  console.log(noteArray,noteID,imgWrappers)
 }
 function fileInput(){
   document.querySelector('#fileInput').addEventListener('change', function() {
@@ -129,8 +133,9 @@ function fileInput(){
         };
         reader.readAsDataURL(file); 
     }
-});
-function removeImgListener(){
+  });
+}
+export function removeImgListener(){
   document.querySelectorAll('.remove-img').forEach((element) => {
       element.addEventListener('click', function() {
           var imgWrapper = this.parentElement;
@@ -146,7 +151,6 @@ function updateImgContainerVisibility() {
     imgContainer.classList.remove("d-block")
     imgContainer.classList.add("d-done")
   }
-}
 }
 function addBtnNote(){
   document.getElementById('add-note-btn').addEventListener('click', function() {

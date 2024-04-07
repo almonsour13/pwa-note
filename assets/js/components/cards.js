@@ -1,6 +1,6 @@
 import { getNoteDataById, updateStatus } from "../dataController.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
-
+import { removeImgListener } from '../modal.js'
 const database = getDatabase();
 const noteRef = ref(database, 'notes/');
 
@@ -45,7 +45,7 @@ export function cards() {
         for (const key in notes) {
             const note = notes[key];
             if(logid === note.userID && note.status == 0 && note.images) {
-                loadImages(note.images,key);
+                loadImages(note.images,key,1);
             }
         }
         clickCardListener();
@@ -55,8 +55,14 @@ export function cards() {
 
 import { getStorage, ref as storageRef, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-storage.js";
 
-function loadImages(noteImages,key) {
-    const imgContainer = document.querySelector(`#img-container${key}`);
+ function loadImages(noteImages,key,type) {
+    var imgContainer = ''
+    if(type == 1){
+      imgContainer = document.querySelector(`#img-container${key}`);
+    }else if(type== 2){
+imgContainer = document.querySelector(`.img-wrapper`);
+    }
+    console.log(noteImages)
     const storage = getStorage();
     for (let i = 0; i < noteImages.length; i++) {
         const storageReference = storageRef(storage, 'images/' + noteImages[i]);
@@ -66,7 +72,7 @@ function loadImages(noteImages,key) {
                 img.classList = 'w-100 rounded-3'
                 img.src = url;
                 img.onload =() => {
-initializeMasonry()
+                  initializeMasonry()
                 }
                 imgContainer.appendChild(img);
                 initializeMasonry()
@@ -76,8 +82,6 @@ initializeMasonry()
             });
     }
 }
-
-
 
 function clickCardListener(){
     document.querySelectorAll('.card').forEach(element => {
@@ -123,7 +127,26 @@ function clickCardListener(){
                             element.classList.add("active");
                         }
                     });
+                    var images = note.images;
+                    if(images){
+                      var imgContainer = document.querySelector('.img-container')
+                      imgContainer.classList.remove("d-none")
+                        imgContainer.classList.add("d-block")
+                        var removeButton = document.createElement('button');
+                         var imgWrapper = document.createElement('div');
+        imgWrapper.className = "img-wrapper w-100 bg-primary p-0 position-relative";
+        removeButton.className = 'remove-img position-absolute btn rounded-3 m-1 p-1';
+        removeButton.style.bottom = "0";
+        removeButton.style.right = "0";
+        removeButton.style.backgroundColor = "rgba(255, 255, 255, 0.475)";
+      
+        removeButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>';
 
+        imgWrapper.appendChild(removeButton);
+        imgContainer.appendChild(imgWrapper);
+        removeImgListener()
+        loadImages(images,id,2)
+                    }
                     const modal = document.getElementById('exampleModal');
                     document.getElementById('delete-btn').addEventListener('click', function(){
                         updateStatus(id,2)
