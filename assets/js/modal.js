@@ -29,12 +29,10 @@ function saveNote(){
     var imagesPromiseArray = [];
 
     if (imgWrappers.length !== 0) {
-        // Iterate over each image wrapper and push the uploadImage promise to the array
         imgWrappers.forEach(function(element) {
             imagesPromiseArray.push(uploadImage());
         });
     }
-    console.log(imagesPromiseArray)
     var logid = JSON.parse(localStorage.getItem('log-id')) || [];
     const noteArray = {
         userID: logid,
@@ -47,23 +45,34 @@ function saveNote(){
         reminder: '',
         pin: pinValue
     };
-    // Promise.all(imagesPromiseArray)
-    // .then(function(imagesArrays) {
-    //     // Flatten the array of arrays into a single array of images
-    //     var images = imagesArrays.flat();
-    //     noteArray.images = images;
-    // })
-    // .catch(function(error) {
-    //     console.error('Error uploading images:', error);
-    // });
+    const noteID = modal.getAttribute('noteID');
+   if(imgWrappers.length === 0){
+      pushOrUpdate(noteID, noteArray,imgWrappers)
+    }else{
+    Promise.all(imagesPromiseArray)
+    .then(function(imagesArrays) {
+        // Flatten the array of arrays into a single array of images
+        var images = imagesArrays.flat();
+        noteArray.images = images;
+        pushOrUpdate(noteID,noteArray,imgWrappers)
+    })
+    .catch(function(error) {
+        console.error('Error uploading images:', error);
+    });
+    }
+    
     noteTitle.value = "";
     noteText.value = "";
     setTimeout(function() {
       modalContent.style.backgroundColor = '';
     }, 500);
-    const noteID = modal.getAttribute('noteID');
     
-    if (noteID != null && noteID != '0') {
+  console.log(noteArray)
+  modal.removeAttribute("noteID");
+  });
+}
+function pushOrUpdate(noteID,noteArray,imgWrappers){
+  if (noteID != null && noteID != '0') {
       const existingNote = getNoteDataById(noteID);
       if (existingNote.title !== noteArray.title || existingNote.text !== noteArray.text || imgWrappers.length !== 0) {
           console.log("update")
@@ -80,9 +89,6 @@ function saveNote(){
         console.log("Please enter both title and text for the note.");
       }
   }
-  modal.removeAttribute("noteID");
-  console.log(noteArray)
-  });
 }
 function fileInput(){
   document.querySelector('#fileInput').addEventListener('change', function() {

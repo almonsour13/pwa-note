@@ -1,43 +1,81 @@
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
 import { getNoteDataById, updateStatus } from "../dataController.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
+import { getStorage,ref as storageRef} from "https://www.gstatic.com/firebasejs/10.10.0/firebase-storage.js";
+
 const database = getDatabase();
 const noteRef = ref(database, 'notes/');
+
 export function cards() {
     onValue(noteRef, (snapshot) => {
-      const notes = snapshot.val(); 
-      const cardContainer = document.querySelector('.card-container');
-      let cardContainerHTML = '';
-      var logid = JSON.parse(localStorage.getItem('log-id')) || [];
-      for (const key in notes) {
-        const note = notes[key];
-        if(logid === note.userID && note.status == 0){
-            let itemContent = note.content.substring(0, 300);
-            if (note.content.length >= 400) {
-                itemContent += '...';
-            }
+        const notes = snapshot.val(); 
+        const cardContainer = document.querySelector('.card-container');
+        let cardContainerHTML = '';
+        var logid = JSON.parse(localStorage.getItem('log-id')) || [];
+        for (const key in notes) {
+            const note = notes[key];
+            if(logid === note.userID && note.status == 0){
+                let itemContent = note.content.substring(0, 300);
+                if (note.content.length >= 400) {
+                    itemContent += '...';
+                }
+                if(note.images){
+                
+var noteImages = note.images;
+loadImages(noteImages)
+for (let i = 0; i < noteImages.length; i++) {
+    console.log(noteImages[i]);
+}
+}
 
-            cardContainerHTML += `
-            <div class="col-6 col-sm-6 col-lg-3 p-1">
-                <div id="${key}" class="card border-1 border-dark rounded-3 p-2 d-flex flex-column gap-2 cursor-pointer" style="background-color: ${note.color};">
-                ${note.title ? 
-                    `<div class="card-header border-0 p-0 py-1 bg-transparent">
-                        <p class="card-title h5 text-truncate m-0">${note.title}</p>
-                    </div>` : ''
-                    }
-                ${note.content ? 
-                    `<div class="card-body p-0">
-                        <p class="card-text lh-sm m-0">${itemContent}</p>
-                    </div>` : ''
-                    }
-                </div>
-            </div>`;
+                cardContainerHTML += `
+                    <div class="col-6 col-sm-6 col-lg-3 p-1">
+                        <div id="${key}" class="card border-1 border-dark rounded-3 p-2 d-flex flex-column gap-2 cursor-pointer" style="background-color: ${note.color};">
+                            ${note.images ? 
+                                `<div class="img-container">
+                                    hsjs
+                                </div>` 
+                            : ''}
+                            ${note.title ? 
+                                `<div class="card-header border-0 p-0 py-1 bg-transparent">
+                                    <p class="card-title h5 text-truncate m-0">${note.title}</p>
+                                </div>` 
+                            : ''}
+                            ${note.content ? 
+                                `<div class="card-body p-0">
+                                    <p class="card-text lh-sm m-0">${itemContent}</p>
+                                </div>` 
+                            : ''}
+                        </div>
+                    </div>`;
+            }
         }
-        }
-      cardContainer.innerHTML = cardContainerHTML;
-      clickCardListener();
-      initializeMasonry()
+        cardContainer.innerHTML = cardContainerHTML;
+        clickCardListener();
+        initializeMasonry()
     });
 }   
+
+function loadImages(noteImages) {
+    const imgContainer = document.querySelector('.img-container');
+    const storage = getStorage();
+    for (let i = 0; i < noteImages.length; i++) {
+        const imagesRef = storage.ref('images/' + noteImages[i]);
+        try {
+            imagesRef.getDownloadURL()
+                .then(url => {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    imgContainer.appendChild(img);
+                })
+                .catch(error => {
+                    console.error("Error fetching image URL:", error);
+                });
+        } catch (error) {
+            console.error("Error fetching images:", error);
+        }
+    }
+}
+
 function clickCardListener(){
     document.querySelectorAll('.card').forEach(element => {
         element.addEventListener('click', function() {
@@ -97,7 +135,6 @@ function clickCardListener(){
         });
     });
 }
-
 
 function initializeMasonry() {
     var container = document.querySelector('.card-container');
