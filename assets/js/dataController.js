@@ -15,6 +15,7 @@ export function updateData(noteArray, id) {
 
 export function updateStatus(id, status) {
   const noteItemRef = ref(database, `notes/${id}`);
+  console.log(id)
   update(
     noteItemRef,
     {
@@ -51,7 +52,7 @@ export function uploadImage() {
       const storage = getStorage();
       imgWrappers.forEach(function(element) {
           var img = element.querySelector("img");
-          if (img.src && img.src !== '#') {
+          if (img.src && img.src !== '#' && !img.hasAttribute("name")) {
               promises.push(
                   fetch(img.src) // Fetch the image data from the src URL
                   .then(response => response.blob()) // Convert the response to a blob
@@ -79,10 +80,11 @@ export function uploadImage() {
                   })
               );
           } else {
+              array.push(img.getAttribute("name"));
               console.error('No image selected!');
           }
       });
-
+      console.log(array)
       Promise.all(promises)
           .then(() => resolve(array))
           .catch(reject);

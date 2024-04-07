@@ -1,6 +1,6 @@
 import { getNoteDataById, updateStatus } from "../dataController.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
-import { removeImgListener } from '../modal.js'
+import { removeImgListener,fileInput } from '../modal.js'
 const database = getDatabase();
 const noteRef = ref(database, 'notes/');
 
@@ -13,10 +13,7 @@ export function cards() {
         for (const key in notes) {
             const note = notes[key];
             if(logid === note.userID && note.status == 0){
-                let itemContent = note.content.substring(0, 300);
-                if (note.content.length >= 400) {
-                    itemContent += '...';
-                }
+                const itemContent = note.content.substring(0, 300) + (note.content.length >= 400 ? '...' : '');
 
                 cardContainerHTML += `
                     <div class="col-6 col-sm-6 col-lg-3 p-1">
@@ -39,13 +36,14 @@ export function cards() {
                             : ''}
                         </div>
                     </div>`;
+                    
             }
         }
         cardContainer.innerHTML = cardContainerHTML;
         for (const key in notes) {
             const note = notes[key];
             if(logid === note.userID && note.status == 0 && note.images) {
-                loadImages(note.images,key,1);
+                loadImages(note,key,1);
             }
         }
         clickCardListener();
@@ -55,25 +53,20 @@ export function cards() {
 
 import { getStorage, ref as storageRef, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-storage.js";
 
- function loadImages(noteImages,key,type) {
-    var imgContainer = ''
-    if(type == 1){
-      imgContainer = document.querySelector(`#img-container${key}`);
-    }else if(type== 2){
-imgContainer = document.querySelector(`.img-wrapper`);
-    }
-    console.log(noteImages)
+ function loadImages(note,key,type) {
+    const imgContainer = (type === 1) ? document.querySelector(`#img-container${key}`) : document.querySelector('.img-wrapper');
     const storage = getStorage();
-    for (let i = 0; i < noteImages.length; i++) {
+    var noteImages =  note.images;
+    for (let i = 0; i <noteImages.length; i++) {
         const storageReference = storageRef(storage, 'images/' + noteImages[i]);
         getDownloadURL(storageReference)
             .then((url) => {
                 const img = document.createElement('img');
-                img.classList = 'w-100 rounded-3'
+                img.classList = `w-100 ${note.title || note.content || type === 2 ?'rounded-top':'rounded-3'}`
                 img.src = url;
-                img.onload =() => {
-                  initializeMasonry()
-                }
+                img.setAttribute("name",noteImages[i])
+                img.onload =() => initializeMasonry()
+            
                 imgContainer.appendChild(img);
                 initializeMasonry()
             })
@@ -96,11 +89,14 @@ function clickCardListener(){
                     const noteText = document.querySelector("#inputed-note-text");
                     noteText.value = note.content;
                     noteText.style.height = 'auto';
+                    var imgContainer = document.querySelector('.img-container')
+                    imgContainer.innerHTML = '';
+                    imgContainer.classList.remove("d-block")
+                    imgContainer.classList.add("d-done")
                     setTimeout(function() {
                         noteText.style.height = (noteText.scrollHeight) + 'px';
                         noteText.focus();
                     }, 500);
-                    
 
                     const pinBtn = document.querySelector('#pin-btn');
                     pinBtn.classList.contains("pinned") ? pinBtn.classList.remove("pinned") : "";
@@ -127,25 +123,25 @@ function clickCardListener(){
                             element.classList.add("active");
                         }
                     });
+                   // fileInput()
                     var images = note.images;
+                    console.log(images)
                     if(images){
-                      var imgContainer = document.querySelector('.img-container')
-                      imgContainer.classList.remove("d-none")
+                        imgContainer.classList.remove("d-none")
                         imgContainer.classList.add("d-block")
                         var removeButton = document.createElement('button');
-                         var imgWrapper = document.createElement('div');
-        imgWrapper.className = "img-wrapper w-100 bg-primary p-0 position-relative";
-        removeButton.className = 'remove-img position-absolute btn rounded-3 m-1 p-1';
-        removeButton.style.bottom = "0";
-        removeButton.style.right = "0";
-        removeButton.style.backgroundColor = "rgba(255, 255, 255, 0.475)";
-      
-        removeButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>';
+                        var imgWrapper = document.createElement('div');
+                        imgWrapper.className = "img-wrapper w-100 p-0 position-relative";
+                        removeButton.className = 'remove-img position-absolute btn rounded-3 m-1 p-1';
+                        removeButton.style.bottom = "0";
+                        removeButton.style.right = "0";
+                        removeButton.style.backgroundColor = "rgba(255, 255, 255, 0.475)";     
+                        removeButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>';
 
-        imgWrapper.appendChild(removeButton);
-        imgContainer.appendChild(imgWrapper);
-        removeImgListener()
-        loadImages(images,id,2)
+                        imgWrapper.appendChild(removeButton);
+                        imgContainer.appendChild(imgWrapper);
+                        removeImgListener()
+                        loadImages(note,id,2)
                     }
                     const modal = document.getElementById('exampleModal');
                     document.getElementById('delete-btn').addEventListener('click', function(){
@@ -153,6 +149,7 @@ function clickCardListener(){
                     })
                     modal.setAttribute("noteID", id);
                     new bootstrap.Modal(modal).show();
+                    
                 }
             })
             .catch((error) => {

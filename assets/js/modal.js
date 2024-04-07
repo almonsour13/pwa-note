@@ -27,11 +27,10 @@ function saveNote(){
     }
     var imgWrappers = document.querySelectorAll('.img-wrapper');
     var imagesPromiseArray = [];
-    var imgContainer = document.querySelector('.img-container');
     if (imgWrappers.length !== 0) {
-        imgWrappers.forEach(function(element) {
-            imagesPromiseArray.push(uploadImage());
-        });
+      imgWrappers.forEach(function(element) {
+          imagesPromiseArray.push(uploadImage());
+      });
     }
     var logid = JSON.parse(localStorage.getItem('log-id')) || [];
     const noteArray = {
@@ -45,56 +44,68 @@ function saveNote(){
         reminder: '',
         pin: pinValue
     };
-    console.log(imgWrappers.length)
     const noteID = modal.getAttribute('noteID');
-   if(imgWrappers.length === 0){
-      pushOrUpdate(noteID, noteArray,imgWrappers)
-    }else{
-    Promise.all(imagesPromiseArray)
-    .then(function(imagesArrays) {
-        // Flatten the array of arrays into a single array of images
-        var images = imagesArrays.flat();
-        noteArray.images = images;
-        pushOrUpdate(noteID,noteArray,imgWrappers)
-    })
-    .catch(function(error) {
-        console.error('Error uploading images:', error);
-    });
+    if(noteID != null){//update
+      if(imgWrappers.length !== 0){//has image
+        addImageInArray(imagesPromiseArray,noteArray,noteID)
+      }else{
+        noteArray.images = [];
+        update(noteID,noteArray)
+      }
+    }else{//push
+      if(imgWrappers.length !== 0){//has image
+        addImageInArray(imagesPromiseArray,noteArray,noteID)
+      }else{
+        push(noteArray,imgWrappers.length)
+      }
     }
-    
     noteTitle.value = "";
     noteText.value = "";
     setTimeout(function() {
       modalContent.style.backgroundColor = '';
     }, 500);
-    
- // console.log(noteArray)
-  // imgContainer.innerHTML = '';
-  //       imgContainer.classList.remove("d-block")
-       // imgContainer.classList.add("d-done")
-  modal.removeAttribute("noteID");
+    var imgContainer = document.querySelector('.img-container')
+    imgContainer.innerHTML = '';
+    imgContainer.classList.remove("d-block")
+    imgContainer.classList.add("d-done")
+    modal.removeAttribute("noteID");
   });
 }
-function pushOrUpdate(noteID,noteArray,imgWrappers){
-  if (noteID != null && noteID != '0') {
-      const existingNote = getNoteDataById(noteID);
-      if (existingNote.title !== noteArray.title || existingNote.text !== noteArray.text || imgWrappers.length !== existingNote.images) {
-          updateData(noteArray, noteID)
-      } else {
-          console.log("No changes");
-      }
-  } else {
-      // Check if either title or text field is empty
-      if (noteArray.title.trim().length !== 0 || noteArray.content.trim().length !== 0) {
-        console.log("push")
-        pushData(noteArray)
-      }else{
-        console.log("Please enter both title and text for the note.");
-      }
-  }
-  console.log(noteArray,noteID,imgWrappers)
+function addImageInArray(imagesPromiseArray,noteArray,noteID){
+  console.log(noteID)
+  Promise.all(imagesPromiseArray)
+    .then(function(imagesArrays) {
+        var images = imagesArrays.flat();
+        noteArray.images = images;
+        if(noteID != null){
+          update(noteID,noteArray)
+        }else{
+          push(noteArray,images.length)
+        }
+    })
+    .catch(function(error) {
+        console.error('Error uploading images:', error);
+    });
 }
-function fileInput(){
+function update(noteID,noteArray){
+  const existingNote = getNoteDataById(noteID);
+  console.log(noteArray)
+  if (existingNote.title !== noteArray.title || existingNote.text !== noteArray.text || imgWrappers.length !== existingNote.images) {
+    updateData(noteArray, noteID)
+    console.log("update")
+  } else {
+    console.log("No changes");
+  }
+}
+function push(noteArray,images){
+  if(noteArray.title.length !== 0 || noteArray.content.length !== 0 || images !== 0 ) {
+    console.log("push")
+    pushData(noteArray)
+  }else{
+    console.log("Please enter both title and text for the note.");
+  }
+}
+export function fileInput(){
   document.querySelector('#fileInput').addEventListener('change', function() {
     if (this.files && this.files[0]) {
         var imgWrapper = document.createElement('div');
@@ -120,6 +131,7 @@ function fileInput(){
 
         // Set up a FileReader to read the file as a data URL
         var reader = new FileReader();
+        console.log(file)
         reader.onload = function(event) {
         img.onload = () => {
           URL.revokeObjectURL(img.src); // no longer needed, free memory
@@ -174,6 +186,10 @@ function addBtnNote(){
     document.querySelectorAll(".card-btn").forEach(element => {
         element.classList.add("d-none")
     })
+    var imgContainer = document.querySelector('.img-container')
+    imgContainer.innerHTML = '';
+    imgContainer.classList.remove("d-block")
+    imgContainer.classList.add("d-done")
 });
 }
 function pinBtnListener(){
