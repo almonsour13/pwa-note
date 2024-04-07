@@ -1,6 +1,5 @@
 import { getNoteDataById, updateStatus } from "../dataController.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-database.js";
-import { getStorage,ref as storageRef} from "https://www.gstatic.com/firebasejs/10.10.0/firebase-storage.js";
 
 const database = getDatabase();
 const noteRef = ref(database, 'notes/');
@@ -18,30 +17,23 @@ export function cards() {
                 if (note.content.length >= 400) {
                     itemContent += '...';
                 }
-                if(note.images){
-                
-var noteImages = note.images;
-loadImages(noteImages)
-for (let i = 0; i < noteImages.length; i++) {
-    console.log(noteImages[i]);
-}
-}
 
                 cardContainerHTML += `
                     <div class="col-6 col-sm-6 col-lg-3 p-1">
-                        <div id="${key}" class="card border-1 border-dark rounded-3 p-2 d-flex flex-column gap-2 cursor-pointer" style="background-color: ${note.color};">
+                        <div id="${key}" class="card border-1 border-dark rounded-3 p-0 d-flex flex-column gap-2 cursor-pointer" style="background-color: ${note.color};">
                             ${note.images ? 
-                                `<div class="img-container">
-                                    hsjs
+                                `<div class="card-img-container w-100 rounded-3"
+                                id='img-container${key}'>
+                                    
                                 </div>` 
                             : ''}
                             ${note.title ? 
-                                `<div class="card-header border-0 p-0 py-1 bg-transparent">
+                                `<div class="card-header border-0 p-2 bg-transparent">
                                     <p class="card-title h5 text-truncate m-0">${note.title}</p>
                                 </div>` 
                             : ''}
                             ${note.content ? 
-                                `<div class="card-body p-0">
+                                `<div class="card-body p-2">
                                     <p class="card-text lh-sm m-0">${itemContent}</p>
                                 </div>` 
                             : ''}
@@ -50,31 +42,42 @@ for (let i = 0; i < noteImages.length; i++) {
             }
         }
         cardContainer.innerHTML = cardContainerHTML;
+        for (const key in notes) {
+            const note = notes[key];
+            if(logid === note.userID && note.status == 0 && note.images) {
+                loadImages(note.images,key);
+            }
+        }
         clickCardListener();
         initializeMasonry()
     });
 }   
 
-function loadImages(noteImages) {
-    const imgContainer = document.querySelector('.img-container');
+import { getStorage, ref as storageRef, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-storage.js";
+
+function loadImages(noteImages,key) {
+    const imgContainer = document.querySelector(`#img-container${key}`);
     const storage = getStorage();
     for (let i = 0; i < noteImages.length; i++) {
-        const imagesRef = storage.ref('images/' + noteImages[i]);
-        try {
-            imagesRef.getDownloadURL()
-                .then(url => {
-                    const img = document.createElement('img');
-                    img.src = url;
-                    imgContainer.appendChild(img);
-                })
-                .catch(error => {
-                    console.error("Error fetching image URL:", error);
-                });
-        } catch (error) {
-            console.error("Error fetching images:", error);
-        }
+        const storageReference = storageRef(storage, 'images/' + noteImages[i]);
+        getDownloadURL(storageReference)
+            .then((url) => {
+                const img = document.createElement('img');
+                img.classList = 'w-100 rounded-3'
+                img.src = url;
+                img.onload =() => {
+initializeMasonry()
+                }
+                imgContainer.appendChild(img);
+                initializeMasonry()
+            })
+            .catch((error) => {
+                console.error("Error fetching image URL:", error);
+            });
     }
 }
+
+
 
 function clickCardListener(){
     document.querySelectorAll('.card').forEach(element => {
