@@ -28,9 +28,9 @@ function saveNote(){
     var imgWrappers = document.querySelectorAll('.img-wrapper');
     var imagesPromiseArray = [];
     if (imgWrappers.length !== 0) {
-      imgWrappers.forEach(function(element) {
+    //  imgWrappers.forEach(function(element) {
           imagesPromiseArray.push(uploadImage());
-      });
+    //  });
     }
     var logid = JSON.parse(localStorage.getItem('log-id')) || [];
     const noteArray = {
