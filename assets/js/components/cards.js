@@ -53,28 +53,53 @@ export function cards() {
 
 import { getStorage, ref as storageRef, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-storage.js";
 
- function loadImages(note,key,type) {
-    const imgContainer = (type === 1) ? document.querySelector(`#img-container${key}`) : document.querySelector('.img-wrapper');
+ function loadImages(note, key, type) {
+    const imgContainer = (type === 1) ? document.querySelector(`#img-container${key}`) : document.querySelector('.img-container');
     const storage = getStorage();
     var noteImages =  note.images;
-    for (let i = 0; i <noteImages.length; i++) {
+    console.log(noteImages) 
+    for (let i = 0; i < noteImages.length; i++) {
         const storageReference = storageRef(storage, 'images/' + noteImages[i]);
         getDownloadURL(storageReference)
             .then((url) => {
                 const img = document.createElement('img');
-                img.classList = `w-100 ${note.title || note.content || type === 2 ?'rounded-top':'rounded-3'}`
+                img.classList = `w-100 ${note.title || note.content || type === 2 || noteImages.length !=1? 'rounded-top' : 'rounded-3'}`;
                 img.src = url;
-                img.setAttribute("name",noteImages[i])
-                img.onload =() => initializeMasonry()
-            
-                imgContainer.appendChild(img);
-                initializeMasonry()
+                img.setAttribute("name", noteImages[i]);
+                img.onload = () => initializeMasonry();
+                
+                if (type === 2) {
+                    // Create a wrapper for images
+                    var imgWrapper = document.createElement('div');
+        imgWrapper.className = "img-wrapper w-100 bg-primary p-0 position-relative";
+        // imgWrapper.classList.add("col"); // If you want to add this class separately
+        
+        
+        
+        var removeButton = document.createElement('button');
+        removeButton.className = 'remove-img position-absolute btn rounded-3 m-1 p-1';
+        removeButton.style.bottom = "0";
+        removeButton.style.right = "0";
+        removeButton.style.backgroundColor = "rgba(255, 255, 255, 0.475)";
+      
+        removeButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>';
+
+        imgWrapper.appendChild(removeButton);
+        imgWrapper.appendChild(img);
+        imgContainer.appendChild(imgWrapper)
+                } else {
+                    imgContainer.appendChild(img);
+                }
+                
+                removeImgListener();
+                initializeMasonry();
             })
             .catch((error) => {
                 console.error("Error fetching image URL:", error);
             });
     }
 }
+
 
 function clickCardListener(){
     document.querySelectorAll('.card').forEach(element => {
@@ -129,18 +154,8 @@ function clickCardListener(){
                     if(images){
                         imgContainer.classList.remove("d-none")
                         imgContainer.classList.add("d-block")
-                        var removeButton = document.createElement('button');
-                        var imgWrapper = document.createElement('div');
-                        imgWrapper.className = "img-wrapper w-100 p-0 position-relative";
-                        removeButton.className = 'remove-img position-absolute btn rounded-3 m-1 p-1';
-                        removeButton.style.bottom = "0";
-                        removeButton.style.right = "0";
-                        removeButton.style.backgroundColor = "rgba(255, 255, 255, 0.475)";     
-                        removeButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" width="20"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>';
-
-                        imgWrapper.appendChild(removeButton);
-                        imgContainer.appendChild(imgWrapper);
-                        removeImgListener()
+                        
+                        
                         loadImages(note,id,2)
                     }
                     const modal = document.getElementById('exampleModal');
