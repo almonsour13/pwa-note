@@ -117,7 +117,7 @@ export function fileInput(){
         img.className = "w-100 h-auto";
         
         var removeButton = document.createElement('button');
-        removeButton.className = 'remove-img position-absolute btn rounded-3 m-1 p-1';
+        removeButton.className = 'remove-img position-absolute btn rounded-3 m-2 p-1';
         removeButton.style.bottom = "0";
         removeButton.style.right = "0";
         removeButton.style.backgroundColor = "rgba(255, 255, 255, 0.475)";
